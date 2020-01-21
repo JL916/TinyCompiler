@@ -1,0 +1,71 @@
+S -> func funcs
+funcs -> func funcs
+funcs -> EMPTY
+func -> TYPE IDENTIFIER ( arglist ) { definelist statements }
+arglist -> TYPE IDENTIFIER args
+arglist -> EMPTY
+args -> , TYPE IDENTIFIER args
+args -> EMPTY
+definelist -> definestatement definelist
+definelist -> EMPTY
+definestatement -> TYPE IDENTIFIER init other ;
+init -> = expression
+init -> EMPTY
+other -> , IDENTIFIER init other
+other -> EMPTY
+statements -> statement statements
+statements -> EMPTY
+statement -> expression ;
+statement -> ifstatement
+statement -> whilestatement
+statement -> forstatement
+statement -> dowhilestatement
+statement -> returnstatement
+ifstatement -> if ( expression ) { statements } elsestate
+elsestate -> else { statements }
+elsestate -> EMPTY
+whilestatement -> while ( expression ) { statements }
+forstatement -> for ( expression ; expression ; expression ) { statements }
+dowhilestatement -> do { statements } while ( expression ) ;
+returnstatement -> return ret ;
+ret -> expression 
+ret -> EMPTY
+expression -> item expr
+expr -> op2 expression
+expr -> EMPTY
+item -> IDENTIFIER callfunc
+item -> INTEGER
+item -> FLOAT
+item -> ' CHAR '
+item -> " STRING "
+item -> ( expression )
+item -> op1 item
+callfunc -> ( parameters )
+callfunc -> EMPTY
+parameters -> expression param
+parameters -> EMPTY
+param -> , expression param
+param -> EMPTY
+op1 -> +
+op1 -> -
+op1 -> ~
+op1 -> !
+op1 -> ++
+op1 -> --
+op2 -> +
+op2 -> -
+op2 -> *
+op2 -> /
+op2 -> %
+op2 -> &
+op2 -> |
+op2 -> ^
+op2 -> <
+op2 -> >
+op2 -> =
+op2 -> <=
+op2 -> >=
+op2 -> !=
+op2 -> ==
+op2 -> &&
+op2 -> ||
