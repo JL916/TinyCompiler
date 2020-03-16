@@ -1,6 +1,6 @@
 package analyser;
 
-// ��Ԫʽ
+// ËÄÔªÊ½
 public class FourItem {
 	
 	public String op;

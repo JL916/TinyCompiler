@@ -5,13 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// Óï·¨Ê÷µÄ½Úµã
+// è¯­æ³•æ ‘çš„èŠ‚ç‚¹
 public class Node {
 	
-	private String name;		// Ãû×Ö
-	private Node father;		// ¸¸½Úµã
-	private List<Node> sons;	// ×Ó½Úµã
-	private Map<String, String> attributeMap;	// ÊôĞÔ±í
+	private String name;		// åå­—
+	private Node father;		// çˆ¶èŠ‚ç‚¹
+	private List<Node> sons;	// å­èŠ‚ç‚¹
+	private Map<String, String> attributeMap;	// å±æ€§è¡¨
 	
 	public Node(String name, Node father) {
 		super();

@@ -4,13 +4,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-// ²úÉúÊ½Àà
+// äº§ç”Ÿå¼ç±»
 public class Producer {
 	
 	// S -> func funcs
 	private String left;		// S
 	private List<String> right; // func funcs
-	private Set<String> select; // ²úÉúÊ½µÄ select ¼¯
+	private Set<String> select; // äº§ç”Ÿå¼çš„ select é›†
 	
 	public Producer(String left, List<String> right) {
 		super();

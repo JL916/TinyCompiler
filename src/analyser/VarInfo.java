@@ -1,6 +1,6 @@
 package analyser;
 
-// 变量信息
+// 鍙橀噺淇℃伅
 public class VarInfo {
 
 	public String type;

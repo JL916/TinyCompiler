@@ -1,10 +1,10 @@
 package tokenizer;
 
-// ¼ÇÂ¼·Ö´ÊµÄ½á¹û
+// è®°å½•åˆ†è¯çš„ç»“æœ
 public class Token {
 
-	private TokenType type;	// ÀàĞÍ
-	private String value;	// Öµ
+	private TokenType type;	// ç±»å‹
+	private String value;	// å€¼
 	
 	public Token(TokenType type, String value) {
 		super();

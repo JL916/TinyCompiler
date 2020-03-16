@@ -4,13 +4,13 @@ void main () {
 	scan(c);
 
 	if ((c >= '0') && (c <= '9')) {
-		print("Êý×Ö");
+		print("æ•°å­—");
 	} else {
 		if (((c >= 'a') && (c <= 'z')) ||
 				((c >= 'A') && (c <= 'Z'))) {
-			print("×ÖÄ¸");
+			print("å­—æ¯");
 		} else {
-			print("·ûºÅ");
+			print("ç¬¦å·");
 		}
 	}
 }

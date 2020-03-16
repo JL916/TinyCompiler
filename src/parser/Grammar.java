@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-// Óï·¨Àà
+// è¯­æ³•ç±»
 public class Grammar {
 
 	private Set<String> terminals;
@@ -42,7 +42,7 @@ public class Grammar {
 		check();
 	}
 
-	// »ñÈ¡²úÉúÊ½ ÖÕ¼«·û ·ÇÖÕ¼«·û
+	// è·å–äº§ç”Ÿå¼ ç»ˆæç¬¦ éç»ˆæç¬¦
 	private void initGrammar() {
 		Set<String> signs = new HashSet<String>();
 		try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -72,7 +72,7 @@ public class Grammar {
 		terminals = signs;
 	}
 
-	// Çó first ¼¯
+	// æ±‚ first é›†
 	private void setFirst() {
 		Set<Producer> producerSet = new HashSet<>();
 		Map<String, Integer> numMap = new HashMap<>();
@@ -127,7 +127,7 @@ public class Grammar {
 		}
 	}
 
-	// Çó follow ¼¯
+	// æ±‚ follow é›†
 	private void setFollow() {
 		for (String nonterminal : nonterminals) {
 			followMap.put(nonterminal, new HashSet<String>());
@@ -191,7 +191,7 @@ public class Grammar {
 		}
 	}
 
-	// Çó select ¼¯
+	// æ±‚ select é›†
 	private void setSeclect() {
 		for (Producer p : producers) {
 			Set<String> set = p.getSelect();
@@ -229,7 +229,7 @@ public class Grammar {
 		}
 	}
 
-	// ¼ì²é select ¼¯ÊÇ·ñÓĞ³åÍ»
+	// æ£€æŸ¥ select é›†æ˜¯å¦æœ‰å†²çª
 	private void check() {
 		Map<String, Set<String>> checkMap = new HashMap<>();
 		for (String s : nonterminals) {

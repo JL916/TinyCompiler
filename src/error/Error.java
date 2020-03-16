@@ -1,6 +1,6 @@
 package error;
 
-// 错误信息类
+// 麓铆脦贸臑脜脧垄脌脿
 public class Error {
 
 	String message;

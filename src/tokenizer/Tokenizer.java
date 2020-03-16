@@ -8,7 +8,7 @@ import java.util.Set;
 
 import error.Error;
 
-// ´Ê·¨·ÖÎöÆ÷
+// è¯æ³•åˆ†æå™¨
 public class Tokenizer {
 
 	private static final String[] TYPE = { "int", "char", "float", "void" };
@@ -25,38 +25,38 @@ public class Tokenizer {
 	private List<Error> errors;
 
 	public Tokenizer() {
-		// ³õÊ¼»¯¸÷¸ö¼¯ºÏ
+		// åˆå§‹åŒ–å„ä¸ªé›†åˆ
 		typeset = new HashSet<>(Arrays.asList(TYPE));
 		keywordset = new HashSet<>(Arrays.asList(KEYWORD));
 		symbolset = new HashSet<>(Arrays.asList(SYMBOL));
 	}
 
-	// ´Ê·¨·ÖÎö
+	// è¯æ³•åˆ†æ
 	public void analysis(String text) {
 		tokens = new ArrayList<>();
 		lineNumber = new ArrayList<>();
 		errors = new ArrayList<>();
-		// È¥×¢ÊÍ
+		// å»æ³¨é‡Š
 		text = text.replaceAll("//[\\s\\S]*?\\n", "");
 		text = text.replaceAll("/\\*(.|\\n)*\\*/", "");
 
 		this.text = text + " ";
 		int num = text.length();
-		int index = 0; // ¼ÇÂ¼µ±Ç°ÏÂ±ê
+		int index = 0; // è®°å½•å½“å‰ä¸‹æ ‡
 
 		while (index < num) {
 			char c = text.charAt(index);
 			if (c == '\n') {
-				// ¼ÇÂ¼ĞĞºÅ
+				// è®°å½•è¡Œå·
 				lineNumber.add(tokens.size());
 			}
-			if (Character.isWhitespace(c)) { // Ìø¹ı¿Õ°×·û
+			if (Character.isWhitespace(c)) { // è·³è¿‡ç©ºç™½ç¬¦
 				index++;
-			} else if (Character.isUpperCase(c) || Character.isLowerCase(c)) { // ¿ªÍ·Îª×ÖÄ¸
+			} else if (Character.isUpperCase(c) || Character.isLowerCase(c)) { // å¼€å¤´ä¸ºå­—æ¯
 				index = handleAlpha(index);
-			} else if (Character.isDigit(c)) { // ¿ªÍ·ÎªÊı×Ö
+			} else if (Character.isDigit(c)) { // å¼€å¤´ä¸ºæ•°å­—
 				index = handleDigit(index);
-			} else if (symbolset.contains(c + "")) { // ·ûºÅ
+			} else if (symbolset.contains(c + "")) { // ç¬¦å·
 				if (c == '\"') {
 					int i = index + 1;
 					while (i < num && text.charAt(i) != '\"')
@@ -68,7 +68,7 @@ public class Tokenizer {
 					if (i < num && text.charAt(i) == '\"') {
 						tokens.add(new Token(TokenType.SYMBOL, "\""));
 					} else {
-						errors.add(new Error("line " + getLineNumber(index) + " : " + " È±ÉÙ \" "));
+						errors.add(new Error("line " + getLineNumber(index) + " : " + " ç¼ºå°‘ \" "));
 					}
 					index = i + 1;
 				} else if (c == '\'') {
@@ -85,7 +85,7 @@ public class Tokenizer {
 						tokens.add(new Token(TokenType.SYMBOL, "\'"));
 						index++;
 					} else {
-						errors.add(new Error("line " + getLineNumber(index) + " : " + " È±ÉÙ ' "));
+						errors.add(new Error("line " + getLineNumber(index) + " : " + " ç¼ºå°‘ ' "));
 					}
 				} else if (index + 1 < num && symbolset.contains(text.substring(index, index + 2))) {
 					tokens.add(new Token(TokenType.SYMBOL, text.substring(index, index + 2)));
@@ -95,16 +95,16 @@ public class Tokenizer {
 					index++;
 				}
 			} else {
-				errors.add(new Error("line " + getLineNumber(index) + " : " + "ÎŞ·¨Ê¶±ğ " + c));
+				errors.add(new Error("line " + getLineNumber(index) + " : " + "æ— æ³•è¯†åˆ« " + c));
 				index++;
 			}
 		}
 
-		// Ìí¼ÓÖÕÖ¹·û
+		// æ·»åŠ ç»ˆæ­¢ç¬¦
 		tokens.add(new Token(TokenType.END, "END"));
 	}
 
-	// ¿ªÍ·Îª×ÖÄ¸
+	// å¼€å¤´ä¸ºå­—æ¯
 	private int handleAlpha(int index) {
 		int i = index;
 		char c;
@@ -115,7 +115,7 @@ public class Tokenizer {
 
 		String s = text.substring(index, i);
 
-		// ÅĞ¶Ï ÀàĞÍÃû ¹Ø¼ü×Ö ±êÊ¶·û
+		// åˆ¤æ–­ ç±»å‹å å…³é”®å­— æ ‡è¯†ç¬¦
 		if (typeset.contains(s)) {
 			tokens.add(new Token(TokenType.TYPE, s));
 		} else if (keywordset.contains(s)) {
@@ -127,7 +127,7 @@ public class Tokenizer {
 		return i;
 	}
 
-	// ¿ªÍ·ÎªÊı×Ö
+	// å¼€å¤´ä¸ºæ•°å­—
 	private int handleDigit(int index) {
 		int i = index;
 		char c;
@@ -136,7 +136,7 @@ public class Tokenizer {
 			c = text.charAt(i);
 		} while (Character.isDigit(c));
 
-		// ÅĞ¶Ï Ğ¡Êı ÕûÊı
+		// åˆ¤æ–­ å°æ•° æ•´æ•°
 		if (c == '.') {
 			do {
 				i++;
@@ -144,7 +144,7 @@ public class Tokenizer {
 			} while (Character.isDigit(c));
 			String s = text.substring(index, i);
 			if (s.charAt(s.length()-1) == '.') {
-				errors.add(new Error("line " + getLineNumber(i) + " : " + "Êı×Ö¸ñÊ½´íÎó"));
+				errors.add(new Error("line " + getLineNumber(i) + " : " + "æ•°å­—æ ¼å¼é”™è¯¯"));
 			} else {
 				tokens.add(new Token(TokenType.FLOAT, s));
 			}
@@ -156,7 +156,7 @@ public class Tokenizer {
 		return i;
 	}
 
-	// ·µ»ØĞĞºÅ
+	// è¿”å›è¡Œå·
 	public int getLineNumber(int index) {
 		for (int i = 0; i < lineNumber.size(); i++) {
 			if (lineNumber.get(i) > index)

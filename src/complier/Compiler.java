@@ -2,8 +2,6 @@ package complier;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,6 +11,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import javax.swing.JFileChooser;
@@ -30,18 +29,18 @@ import javax.swing.table.DefaultTableModel;
 import analyser.Analyser;
 import analyser.FourItem;
 import analyser.Generator;
+import error.Error;
+import interpreter.Interpreter;
 import parser.Parser;
 import tokenizer.Token;
 import tokenizer.Tokenizer;
-import error.Error;
-import interpreter.Interpreter;
 
-// ±àÒë³ÌĞòµÄÈë¿Ú ¸ºÔğ½çÃæºÍµ÷ÓÃÆäËûÀà
+// ç¼–è¯‘ç¨‹åºçš„å…¥å£ è´Ÿè´£ç•Œé¢å’Œè°ƒç”¨å…¶ä»–ç±»
 public class Compiler extends JFrame implements ActionListener {
-	
+
 	private static final long serialVersionUID = 1L;
-	
-	// ²Ëµ¥
+
+	// èœå•
 	private JMenuItem openMenu;
 	private JMenuItem saveMenu;
 	private JMenuItem tokenizerMenu;
@@ -49,51 +48,47 @@ public class Compiler extends JFrame implements ActionListener {
 	private JMenuItem analyserMenu;
 	private JMenuItem runMenu;
 	private JMenuItem compileAndRunMenu;
-	
-	// ÎÄ±¾
+
+	// æ–‡æœ¬
 	private JTextArea textArea;
 	private JTable tokenTable;
 	private DefaultTableModel tokenTableModel;
 	private JTextArea codeArea;
 	private JTextArea resultArea;
-	
-	// ±àÒë
+
+	// ç¼–è¯‘
 	private Tokenizer tokenizer;
 	private Parser parser;
 	private Analyser analyser;
 	private Generator generator;
 	private Interpreter interpreter;
-	
-	public Compiler () {
-		Font textFont = new Font("ËÎÌå", 0, 18);
-		
-		openMenu = new JMenuItem("´ò¿ª");
-		saveMenu = new JMenuItem("±£´æ");
-		tokenizerMenu = new JMenuItem("´Ê·¨·ÖÎö");
-		parserMenu = new JMenuItem("Óï·¨·ÖÎö");
-		analyserMenu = new JMenuItem("ÓïÒå·ÖÎö");
-		runMenu = new JMenuItem("Ö´ĞĞ");
-		compileAndRunMenu = new JMenuItem("±àÒë²¢ÔËĞĞ");
-		
-		textArea = new JTextArea(22, 40);
-		tokenTableModel = new DefaultTableModel(null, new String[] {"Öµ", "Àà±ğ"});
+
+	public Compiler() {
+		openMenu = new JMenuItem("æ‰“å¼€");
+		saveMenu = new JMenuItem("ä¿å­˜");
+		tokenizerMenu = new JMenuItem("è¯æ³•åˆ†æ");
+		parserMenu = new JMenuItem("è¯­æ³•åˆ†æ");
+		analyserMenu = new JMenuItem("è¯­ä¹‰åˆ†æ");
+		runMenu = new JMenuItem("æ‰§è¡Œ");
+		compileAndRunMenu = new JMenuItem("ç¼–è¯‘å¹¶è¿è¡Œ");
+
+		textArea = new JTextArea();
+		tokenTableModel = new DefaultTableModel(null, new String[] { "å€¼", "ç±»åˆ«" });
 		tokenTable = new JTable(tokenTableModel);
-		tokenTable.setRowHeight(23);
-		tokenTable.getTableHeader().setFont(textFont);
-		codeArea = new JTextArea(32, 40);
-		resultArea = new JTextArea(9, 80);
-		
-		tokenizer = new Tokenizer();	
+		codeArea = new JTextArea();
+		resultArea = new JTextArea();
+
+		tokenizer = new Tokenizer();
 		parser = new Parser(new File("grammar.txt"));
 		analyser = new Analyser();
 		generator = new Generator();
 		interpreter = new Interpreter(resultArea);
-		
+
 		JMenuBar menuBar = new JMenuBar();
-		JMenu file = new JMenu("ÎÄ¼ş");
-		JMenu compile = new JMenu("±àÒë");
-		JMenu run = new JMenu("ÔËĞĞ");
-		
+		JMenu file = new JMenu("æ–‡ä»¶");
+		JMenu compile = new JMenu("ç¼–è¯‘");
+		JMenu run = new JMenu("è¿è¡Œ");
+
 		openMenu.addActionListener(this);
 		saveMenu.addActionListener(this);
 		tokenizerMenu.addActionListener(this);
@@ -101,7 +96,7 @@ public class Compiler extends JFrame implements ActionListener {
 		analyserMenu.addActionListener(this);
 		runMenu.addActionListener(this);
 		compileAndRunMenu.addActionListener(this);
-		
+
 		file.add(openMenu);
 		file.add(saveMenu);
 		compile.add(tokenizerMenu);
@@ -112,218 +107,225 @@ public class Compiler extends JFrame implements ActionListener {
 		menuBar.add(file);
 		menuBar.add(compile);
 		menuBar.add(run);
-		
+
 		JPanel textPanel = new JPanel();
 		JPanel tokensPanel = new JPanel();
 		JPanel codePanel = new JPanel();
 		JPanel resultPanel = new JPanel();
-		
+
+		textPanel.setLocation(50, 30);
+		textPanel.setSize(330, 480);
+		tokensPanel.setLocation(400, 30);
+		tokensPanel.setSize(330, 480);
+		codePanel.setLocation(750, 30);
+		codePanel.setSize(330, 650);
+		resultPanel.setLocation(50, 530);
+		resultPanel.setSize(680, 150);
+
 		JScrollPane textScroll = new JScrollPane(textArea);
 		textArea.setTabSize(2);
 		textArea.setLineWrap(true);
-		textArea.setFont(textFont);
-		JLabel textLabel = new JLabel("ÎÄ±¾±à¼­");
+		JLabel textLabel = new JLabel("æ–‡æœ¬ç¼–è¾‘");
 		textPanel.setLayout(new BorderLayout());
 		textPanel.add(textLabel, BorderLayout.NORTH);
 		textPanel.add(textScroll);
-		
+
 		JScrollPane tokensScroll = new JScrollPane(tokenTable);
 		tokenTable.setEnabled(false);
 		tokenTable.setPreferredScrollableViewportSize(new Dimension(340, 460));
-		tokenTable.setFont(textFont);
-		JLabel tokensLabel = new JLabel("´Ê·¨·ÖÎö");
+		JLabel tokensLabel = new JLabel("è¯æ³•åˆ†æ");
 		tokensPanel.setLayout(new BorderLayout());
 		tokensPanel.add(tokensLabel, BorderLayout.NORTH);
 		tokensPanel.add(tokensScroll);
-		
+
 		JScrollPane codeScroll = new JScrollPane(codeArea);
 		codeArea.setLineWrap(true);
 		codeArea.setEditable(false);
-		codeArea.setFont(textFont);
-		JLabel codeLabel = new JLabel("ÖĞ¼ä´úÂë");
+		JLabel codeLabel = new JLabel("ä¸­é—´ä»£ç ");
 		codePanel.setLayout(new BorderLayout());
 		codePanel.add(codeLabel, BorderLayout.NORTH);
 		codePanel.add(codeScroll);
-		
+
 		JScrollPane resultScroll = new JScrollPane(resultArea);
 		resultArea.setLineWrap(true);
-		resultArea.setFont(textFont);
-		resultPanel.add(resultScroll);
-		
+		resultPanel.setLayout(new BorderLayout());
+		resultPanel.add(resultScroll, BorderLayout.CENTER);
+
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		Dimension screen = toolkit.getScreenSize();
-		this.setSize(1220, 870);
+		this.setTitle("Tiny Compiler");
+		this.setSize(1150, 800);
 		this.setLocation(screen.width / 2 - this.getWidth() / 2, screen.height / 2 - this.getHeight() / 2);
 		this.setResizable(false);
+		this.setLayout(null);
 		this.setJMenuBar(menuBar);
-		this.setLayout(new GridBagLayout());
-		this.add(textPanel, new GBC(0, 0, 1, 3).setInsets(8));
-		this.add(tokensPanel, new GBC(1, 0, 1, 3).setInsets(8));
-		this.add(codePanel, new GBC(2, 0, 1, 4).setInsets(8));
-		this.add(resultPanel, new GBC(0, 3, 2, 1));
+		this.add(textPanel);
+		this.add(tokensPanel);
+		this.add(codePanel);
+		this.add(resultPanel);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == tokenizerMenu) {
-			// ´Ê·¨·ÖÎö
+			// è¯æ³•åˆ†æ
 			tokenTableModel.setRowCount(0);
 			resultArea.setText("");
 			tokenizer.analysis(textArea.getText());
 			List<Token> tokens = tokenizer.getTokens();
 			for (int i = 0; i < tokens.size() - 1; i++) {
 				Token token = tokens.get(i);
-				tokenTableModel.addRow(new String[] {token.getValue(), token.getType().print()});
+				tokenTableModel.addRow(new String[] { token.getValue(), token.getType().print() });
 			}
-			
+
 			List<Error> errors = tokenizer.getErrors();
 			for (Error error : errors) {
 				resultArea.append(error + "\n");
 			}
- 		} else if (e.getSource() == parserMenu) {
- 			// Óï·¨·ÖÎö
- 			if (tokenizer.getTokens() == null || tokenizer.getTokens().size() == 1) {
- 				resultArea.append("Î´ÊäÈë×Ö·û»òÎ´½øĞĞ´Ê·¨·ÖÎö\n");
- 				return ;
- 			} else if (!resultArea.getText().isBlank() && !resultArea.getText().contains("ÎŞÓï·¨´íÎó")) {
- 				resultArea.append("´æÔÚ´íÎó ÎŞ·¨½øĞĞÓï·¨·ÖÎö\n");
- 				return ;
- 			}
- 			parser.parse(tokenizer);
- 			List<Error> errors = parser.getErrors();
+		} else if (e.getSource() == parserMenu) {
+			// è¯­æ³•åˆ†æ
+			if (tokenizer.getTokens() == null || tokenizer.getTokens().size() == 1) {
+				resultArea.append("æœªè¾“å…¥å­—ç¬¦æˆ–æœªè¿›è¡Œè¯æ³•åˆ†æ\n");
+				return;
+			} else if (!resultArea.getText().isBlank() && !resultArea.getText().contains("æ— è¯­æ³•é”™è¯¯")) {
+				resultArea.append("å­˜åœ¨é”™è¯¯ æ— æ³•è¿›è¡Œè¯­æ³•åˆ†æ\n");
+				return;
+			}
+			parser.parse(tokenizer);
+			List<Error> errors = parser.getErrors();
 			for (Error error : errors) {
 				resultArea.append(error + "\n");
 			}
 			if (errors.size() == 0) {
-				resultArea.append("Óï·¨¼ì²éÍê³É ÎŞÓï·¨´íÎó\n");
+				resultArea.append("è¯­æ³•æ£€æŸ¥å®Œæˆ æ— è¯­æ³•é”™è¯¯\n");
 			}
- 		} else if (e.getSource() == analyserMenu) {
- 			// ÓïÒå·ÖÎöºÍÖĞ¼ä´úÂëÉú³É
- 			if (parser.getRoot() == null) {
- 				resultArea.append("Î´½øĞĞÓï·¨·ÖÎö\n");
- 				return ;
- 			}
- 			String text = resultArea.getText();
- 			if (!text.isBlank() && !text.contains("ÎŞÓï·¨´íÎó")) {
- 				resultArea.append("´æÔÚ´íÎó ÎŞ·¨½øĞĞÓïÒå·ÖÎö\n");
- 					return ;
- 			}
- 			
- 			resultArea.setText("");
- 			analyser.analyse(parser.getRoot());
- 			codeArea.setText("");
- 			List<Error> errors = analyser.getErrors();
+		} else if (e.getSource() == analyserMenu) {
+			// è¯­ä¹‰åˆ†æå’Œä¸­é—´ä»£ç ç”Ÿæˆ
+			if (parser.getRoot() == null) {
+				resultArea.append("æœªè¿›è¡Œè¯­æ³•åˆ†æ\n");
+				return;
+			}
+			String text = resultArea.getText();
+			if (!text.isBlank() && !text.contains("æ— è¯­æ³•é”™è¯¯")) {
+				resultArea.append("å­˜åœ¨é”™è¯¯ æ— æ³•è¿›è¡Œè¯­ä¹‰åˆ†æ\n");
+				return;
+			}
+
+			resultArea.setText("");
+			analyser.analyse(parser.getRoot());
+			codeArea.setText("");
+			List<Error> errors = analyser.getErrors();
 			for (Error error : errors) {
 				resultArea.append(error + "\n");
 			}
 			if (errors.size() == 0) {
 				generator.generate(analyser.getFuncsInfoMap(), analyser.getRoot());
 				List<FourItem> fourItems = generator.getFourItemList();
-	 			for (int i = 0; i < fourItems.size(); i++) {
-	 				FourItem item = fourItems.get(i);
-	 				codeArea.append(String.format("%-3d:", i+1));
-	 				codeArea.append(item + "\n");
-	 			}
+				for (int i = 0; i < fourItems.size(); i++) {
+					FourItem item = fourItems.get(i);
+					codeArea.append(String.format("%-3d:", i + 1));
+					codeArea.append(item + "\n");
+				}
 			}
- 		} else if (e.getSource() == runMenu) {
- 			if (generator.getFourItemList() == null) {
- 				resultArea.append("Î´½øĞĞÓïÒå·ÖÎö\n");
- 				return ;
- 			}
- 			String text = resultArea.getText();
- 			if (!text.isBlank() && !text.contains("ÔËĞĞ½áÊø")) {
- 				resultArea.append("´æÔÚ´íÎó ÎŞ·¨Ö´ĞĞ\n");
- 					return ;
- 			}
- 			resultArea.setText("");
- 			resultArea.requestFocus();
- 			new Thread() {
+		} else if (e.getSource() == runMenu) {
+			if (generator.getFourItemList() == null) {
+				resultArea.append("æœªè¿›è¡Œè¯­ä¹‰åˆ†æ\n");
+				return;
+			}
+			String text = resultArea.getText();
+			if (!text.isBlank() && !text.contains("è¿è¡Œç»“æŸ")) {
+				resultArea.append("å­˜åœ¨é”™è¯¯ æ— æ³•æ‰§è¡Œ\n");
+				return;
+			}
+			resultArea.setText("");
+			resultArea.requestFocus();
+			new Thread() {
 				@Override
 				public void run() {
 					interpreter.interpreter(analyser.getFuncsInfoMap(), generator.getFourItemList());
 				}
- 			}.start();
- 		} else if (e.getSource() == compileAndRunMenu) {
- 			tokenTableModel.setRowCount(0);
- 			codeArea.setText("");
+			}.start();
+		} else if (e.getSource() == compileAndRunMenu) {
+			tokenTableModel.setRowCount(0);
+			codeArea.setText("");
 			resultArea.setText("");
-			
+
 			tokenizer.analysis(textArea.getText());
 			List<Token> tokens = tokenizer.getTokens();
 			for (int i = 0; i < tokens.size() - 1; i++) {
 				Token token = tokens.get(i);
-				tokenTableModel.addRow(new String[] {token.getValue(), token.getType().print()});
+				tokenTableModel.addRow(new String[] { token.getValue(), token.getType().print() });
 			}
 			if (tokenizer.getErrors().size() > 0) {
 				for (Error error : tokenizer.getErrors()) {
 					resultArea.append(error + "\n");
 				}
-				return ;
+				return;
 			}
-			
+
 			parser.parse(tokenizer);
 			if (parser.getErrors().size() > 0) {
 				for (Error error : parser.getErrors()) {
 					resultArea.append(error + "\n");
 				}
-				return ;
+				return;
 			}
-			
+
 			analyser.analyse(parser.getRoot());
 			if (analyser.getErrors().size() > 0) {
 				for (Error error : analyser.getErrors()) {
 					resultArea.append(error + "\n");
 				}
-				return ;
+				return;
 			}
-			
+
 			generator.generate(analyser.getFuncsInfoMap(), analyser.getRoot());
 			List<FourItem> fourItems = generator.getFourItemList();
- 			for (int i = 0; i < fourItems.size(); i++) {
- 				FourItem item = fourItems.get(i);
- 				codeArea.append(String.format("%-3d:", i+1));
- 				codeArea.append(item + "\n");
- 			}
-			
+			for (int i = 0; i < fourItems.size(); i++) {
+				FourItem item = fourItems.get(i);
+				codeArea.append(String.format("%-3d:", i + 1));
+				codeArea.append(item + "\n");
+			}
+
 			resultArea.requestFocus();
- 			new Thread() {
+			new Thread() {
 				@Override
 				public void run() {
 					interpreter.interpreter(analyser.getFuncsInfoMap(), fourItems);
 				}
- 			}.start();
- 		} else if (e.getSource() == openMenu) {
- 			// ´ò¿ªÎÄ¼ş
- 			JFileChooser chooser = new JFileChooser();
- 			chooser.setCurrentDirectory(new File("."));
- 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
- 			chooser.showOpenDialog(this);
- 			File file = new File(chooser.getSelectedFile().getPath());
- 			textArea.setText("");
- 			try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
- 				String line;
- 				while ((line = reader.readLine()) != null) {
- 					textArea.append(line + "\n");
- 				}
- 			} catch (IOException e2) {
+			}.start();
+		} else if (e.getSource() == openMenu) {
+			// æ‰“å¼€æ–‡ä»¶
+			JFileChooser chooser = new JFileChooser();
+			chooser.setCurrentDirectory(new File("."));
+			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			chooser.showOpenDialog(this);
+			File file = new File(chooser.getSelectedFile().getPath());
+			textArea.setText("");
+			try (BufferedReader reader = new BufferedReader(new FileReader(file, Charset.forName("UTF-8")))) {
+				String line;
+				while ((line = reader.readLine()) != null) {
+					textArea.append(line + "\n");
+				}
+			} catch (IOException e2) {
 				e2.printStackTrace();
 			}
- 		} else if (e.getSource() == saveMenu) {
- 			// ±£´æÎÄ¼ş
- 			JFileChooser chooser = new JFileChooser();
- 			chooser.setCurrentDirectory(new File("."));
- 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
- 			chooser.showOpenDialog(this);
- 			File file = new File(chooser.getSelectedFile().getPath());
- 			try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
- 				writer.write(textArea.getText());
- 			} catch (IOException e1) {
+		} else if (e.getSource() == saveMenu) {
+			// ä¿å­˜æ–‡ä»¶
+			JFileChooser chooser = new JFileChooser();
+			chooser.setCurrentDirectory(new File("."));
+			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			chooser.showOpenDialog(this);
+			File file = new File(chooser.getSelectedFile().getPath());
+			try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+				writer.write(textArea.getText());
+			} catch (IOException e1) {
 				e1.printStackTrace();
-			} 
- 		}
+			}
+		}
 	}
-	
-	public static void main(String[] args) {		
+
+	public static void main(String[] args) {
 		Compiler frame = new Compiler();
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

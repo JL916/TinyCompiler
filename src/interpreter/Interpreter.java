@@ -10,14 +10,14 @@ import analyser.FourItem;
 import analyser.FuncInfo;
 import analyser.VarInfo;
 
-// ½âÊÍ³ÌĞò
+// è§£é‡Šç¨‹åº
 public class Interpreter {
 
-	private FuncInfo funcInfo;				// º¯ÊıĞÅÏ¢±í
-	private Activity curActivity;			// µ±Ç°»î¶¯
-	private List<VarInfo> varStack;			// º¯Êı±äÁ¿Õ»
-	private List<Activity> activityStack;	// »î¶¯¼ÇÂ¼Õ»
-	private String retVal;					// ·µ»ØÖµ
+	private FuncInfo funcInfo;				// å‡½æ•°ä¿¡æ¯è¡¨
+	private Activity curActivity;			// å½“å‰æ´»åŠ¨
+	private List<VarInfo> varStack;			// å‡½æ•°å˜é‡æ ˆ
+	private List<Activity> activityStack;	// æ´»åŠ¨è®°å½•æ ˆ
+	private String retVal;					// è¿”å›å€¼
 	private JTextArea textArea;		
 	private StringBuilder sb;
 	
@@ -37,7 +37,7 @@ public class Interpreter {
 		
 		funcInfo = funcsInfoMap.get("main");
 		
-		// ½« main º¯ÊıËùÓĞ±äÁ¿Ñ¹Õ»
+		// å°† main å‡½æ•°æ‰€æœ‰å˜é‡å‹æ ˆ
 		for (String var : funcInfo.vars) {
 			String type = funcInfo.getVarInfo(var).type;
 			varStack.add(new VarInfo(type));
@@ -245,7 +245,7 @@ public class Interpreter {
 			}
 		}
 		
-		textArea.append("ÔËĞĞ½áÊø\n");
+		textArea.append("è¿è¡Œç»“æŸ\n");
 	}
 	
 	private String getVal(String id) {

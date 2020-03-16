@@ -12,7 +12,7 @@ import tokenizer.Token;
 import tokenizer.TokenType;
 import tokenizer.Tokenizer;
 
-// ll(1) Óï·¨·ÖÎö Éú³ÉÓï·¨Ê÷
+// ll(1) è¯­æ³•åˆ†æ ç”Ÿæˆè¯­æ³•æ ‘
 public class Parser {
 
 	private Map<String, Set<Producer>> producerMap;
@@ -28,14 +28,14 @@ public class Parser {
 	private Node curNode;
 
 	public Parser(File file) {
-		// ¼ÓÔØÓï·¨
+		// åŠ è½½è¯­æ³•
 		Grammar grammar = new Grammar(file);
 		producerMap = grammar.getProducerMap();
 		terminals = grammar.getTerminals();
 		nonterminals = grammar.getNonterminals();
 	}
 
-	// Óï·¨·ÖÎö
+	// è¯­æ³•åˆ†æ
 	public void parse(Tokenizer tokenizer) {
 		this.tokenizer = tokenizer;
 		this.tokens = tokenizer.getTokens();
@@ -65,7 +65,7 @@ public class Parser {
 		}
 
 		if (producer == null) {
-			errors.add(new Error("line " + tokenizer.getLineNumber(index) + " : " + token.getValue() + " ²»·ûºÏÓï·¨¹æ·¶"));
+			errors.add(new Error("line " + tokenizer.getLineNumber(index) + " : " + token.getValue() + " ä¸ç¬¦åˆè¯­æ³•è§„èŒƒ"));
 			return false;
 		}
 
@@ -85,7 +85,7 @@ public class Parser {
 			curNode.setSon(son);
 			
 			if (terminals.contains(cur)) {
-				// ÖÕ¼«·ûÅĞ¶ÏÊÇ·ñÏàµÈ
+				// ç»ˆæç¬¦åˆ¤æ–­æ˜¯å¦ç›¸ç­‰
 				if (cur.equals("EMPTY")) {
 					continue;
 				} else if (s.equals(cur)) {
@@ -104,11 +104,11 @@ public class Parser {
 					index++;
 					continue;
 				} else {
-					errors.add(new Error("line " + tokenizer.getLineNumber(index) + " : " + t.getValue() + " Ó¦¸ÄÎª " + cur));
+					errors.add(new Error("line " + tokenizer.getLineNumber(index) + " : " + t.getValue() + " åº”æ”¹ä¸º " + cur));
 					return false;
 				}
 			} else if (nonterminals.contains(cur)) {
-				// ·ÇÖÕ¼«·ûµİ¹é
+				// éç»ˆæç¬¦é€’å½’
 				curNode = son;
 				boolean flag = parse(cur);
 				if (flag) {

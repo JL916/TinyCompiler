@@ -5,16 +5,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// º¯ÊıĞÅÏ¢
+// å‡½æ•°ä¿¡æ¯
 public class FuncInfo {
 
-	public int position;		// ÆğÊ¼Î»ÖÃ
-	public String returnType;	// ·µ»ØÀàĞÍ
-	public List<String> vars;	// ±äÁ¿ÁĞ±í
-	public List<String> arglist;// …¢”µÁĞ±í
-	public Map<String, VarInfo> args;	// ²ÎÊı±í
-	public Map<String, VarInfo> locals;// ±¾µØ±äÁ¿±í
-	public Map<String, VarInfo> tmps;	// ÁÙÊ±±äÁ¿±í
+	public int position;		// èµ·å§‹ä½ç½®
+	public String returnType;	// è¿”å›ç±»å‹
+	public List<String> vars;	// å˜é‡åˆ—è¡¨
+	public List<String> arglist;// ç›—æ–œ
+	public Map<String, VarInfo> args;	// å‚æ•°è¡¨
+	public Map<String, VarInfo> locals;// æœ¬åœ°å˜é‡è¡¨
+	public Map<String, VarInfo> tmps;	// ä¸´æ—¶å˜é‡è¡¨
 	
 	public FuncInfo (String returnType) {
 		this.returnType = returnType;

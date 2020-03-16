@@ -11,16 +11,16 @@ import java.util.Set;
 
 import error.Error;
 
-// ÓïÒå·ÖÎö
+// è¯­ä¹‰åˆ†æ
 public class Analyser {
 
-	private Map<String, FuncInfo> funcsInfoMap; // º¯ÊıĞÅÏ¢±í
-	private Map<String, Set<String>> typeMap; 	// ÀàĞÍ×ª»»±í
+	private Map<String, FuncInfo> funcsInfoMap; // å‡½æ•°ä¿¡æ¯è¡¨
+	private Map<String, Set<String>> typeMap; 	// ç±»å‹è½¬æ¢è¡¨
 	private List<Error> errors;
 	private Node root;
 
 	public Analyser() {
-		// ³õÊ¼»¯ÀàĞÍ×ª»»±í
+		// åˆå§‹åŒ–ç±»å‹è½¬æ¢è¡¨
 		typeMap = new HashMap<>();
 		Set<String> set = new HashSet<String>();
 		set.add("char");
@@ -34,7 +34,7 @@ public class Analyser {
 	}
 
 	public void analyse(Node root) {
-		// ÓïÒå·ÖÎö
+		// è¯­ä¹‰åˆ†æ
 		this.root = root;
 		funcsInfoMap = new HashMap<>();
 		
@@ -51,9 +51,9 @@ public class Analyser {
 		funcsInfoMap.put("scan", scanInfo);
 		
 		errors = new ArrayList<>();
-		setFuncsInfoMap(root); // ÉèÖÃº¯ÊıĞÅÏ¢
-		checkType(); // ¼ì²éÀàĞÍ
-		checkReturn(); // ¼ì²é return Óï¾ä
+		setFuncsInfoMap(root); // è®¾ç½®å‡½æ•°ä¿¡æ¯
+		checkType(); // æ£€æŸ¥ç±»å‹
+		checkReturn(); // æ£€æŸ¥ return è¯­å¥
 	}
 
 	private void setFuncsInfoMap(Node root) {
@@ -73,7 +73,7 @@ public class Analyser {
 		FuncInfo info = new FuncInfo(type);
 		
 		if (funcsInfoMap.containsKey(id)) {
-			errors.add(new Error("º¯Êı " + id + " ÖØ¸´¶¨Òå"));
+			errors.add(new Error("å‡½æ•° " + id + " é‡å¤å®šä¹‰"));
 		} else {
 			funcsInfoMap.put(id, info);
 			handleArgList(arglist, id, info);
@@ -89,7 +89,7 @@ public class Analyser {
 		Node args = arglist.getSon(2);
 
 		if (info.args.containsKey(name) || info.locals.containsKey(name)) {
-			errors.add(new Error("º¯Êı " + id + " ²ÎÊıÃû " + name + " ÖØ¸´"));
+			errors.add(new Error("å‡½æ•° " + id + " å‚æ•°å " + name + " é‡å¤"));
 		} else {
 			info.arglist.add(name);
 			info.args.put(name, new VarInfo(type));
@@ -97,7 +97,7 @@ public class Analyser {
 		}
 
 		if (type.equals("void")) {
-			errors.add(new Error("º¯Êı " + id + " ²ÎÊı " + name + " ÀàĞÍ²»ÄÜÎª void"));
+			errors.add(new Error("å‡½æ•° " + id + " å‚æ•° " + name + " ç±»å‹ä¸èƒ½ä¸º void"));
 		}
 
 		handleArgs(args, id, info);
@@ -111,7 +111,7 @@ public class Analyser {
 		Node args2 = args.getSon(3);
 
 		if (info.args.containsKey(name) || info.locals.containsKey(name)) {
-			errors.add(new Error("º¯Êı " + id + " ²ÎÊıÃû " + name + " ÖØ¸´"));
+			errors.add(new Error("å‡½æ•° " + id + " å‚æ•°å " + name + " é‡å¤"));
 		} else {
 			info.arglist.add(name);
 			info.args.put(name, new VarInfo(type));
@@ -119,7 +119,7 @@ public class Analyser {
 		}
 
 		if (type.equals("void")) {
-			errors.add(new Error("º¯Êı " + id + " ²ÎÊı " + name + " ÀàĞÍ²»ÄÜÎª void"));
+			errors.add(new Error("å‡½æ•° " + id + " å‚æ•° " + name + " ç±»å‹ä¸èƒ½ä¸º void"));
 		}
 
 		handleArgs(args2, id, info);
@@ -141,14 +141,14 @@ public class Analyser {
 		Node other = definestatement.getSon(3);
 
 		if (info.args.containsKey(name) || info.locals.containsKey(name)) {
-			errors.add(new Error("º¯Êı " + id + " ±¾µØ±äÁ¿Ãû " + name + " ÖØ¸´"));
+			errors.add(new Error("å‡½æ•° " + id + " æœ¬åœ°å˜é‡å " + name + " é‡å¤"));
 		} else {
 			info.locals.put(name, new VarInfo(type));
 			info.vars.add(name);
 		}
 
 		if (type.equals("void")) {
-			errors.add(new Error("º¯Êı " + id + " ±¾µØ±äÁ¿ " + name + " ÀàĞÍ²»ÄÜÎª void"));
+			errors.add(new Error("å‡½æ•° " + id + " æœ¬åœ°å˜é‡ " + name + " ç±»å‹ä¸èƒ½ä¸º void"));
 		}
 
 		handleOther(other, id, info, type);
@@ -161,7 +161,7 @@ public class Analyser {
 		Node other2 = other.getSon(3);
 
 		if (info.args.containsKey(name) || info.locals.containsKey(name)) {
-			errors.add(new Error("º¯Êı " + id + " ±¾µØ±äÁ¿Ãû " + name + " ÖØ¸´"));
+			errors.add(new Error("å‡½æ•° " + id + " æœ¬åœ°å˜é‡å " + name + " é‡å¤"));
 		} else {
 			info.locals.put(name, new VarInfo(type));
 			info.vars.add(name);
@@ -197,9 +197,9 @@ public class Analyser {
 					break;
 				String typer = init.getSon(1).getAttribute("type");
 				if (typeMap.get(typel) == null) {
-					errors.add(new Error(id + " ÎŞ·¨È·¶¨ÀàĞÍ"));
+					errors.add(new Error(id + " æ— æ³•ç¡®å®šç±»å‹"));
 				} else if (!typeMap.get(typel).contains(typer)) {
-					errors.add(new Error(id + "ÎŞ·¨½øĞĞÀàĞÍ×ª»»"));
+					errors.add(new Error(id + "æ— æ³•è¿›è¡Œç±»å‹è½¬æ¢"));
 				}
 			}
 			List<Node> nodes = node.getSons();
@@ -224,9 +224,9 @@ public class Analyser {
 				String op2 = expr.getSon(0).getAttribute("val");
 				if (op2.equals("=")) {
 					if (typeMap.get(typel) == null) {
-						errors.add(new Error("ÎŞ·¨È·¶¨ÀàĞÍ"));
+						errors.add(new Error("æ— æ³•ç¡®å®šç±»å‹"));
 					} else if (!typeMap.get(typel).contains(typer)) {
-						errors.add(new Error("ÎŞ·¨½øĞĞÀàĞÍ×ª»»"));
+						errors.add(new Error("æ— æ³•è¿›è¡Œç±»å‹è½¬æ¢"));
 					} else {
 						root.setAttribute("type", typel);
 					}
@@ -265,7 +265,7 @@ public class Analyser {
 					} else if (info.locals.containsKey(id)) {
 						type = info.locals.get(id).type;
 					} else {
-						errors.add(new Error("º¯Êı " + funcName + " ÖĞ " + id + " Î´¶¨Òå"));
+						errors.add(new Error("å‡½æ•° " + funcName + " ä¸­ " + id + " æœªå®šä¹‰"));
 						return;
 					}
 					root.setAttribute("type", type);
@@ -273,7 +273,7 @@ public class Analyser {
 					String id = node.getAttribute("val");
 					FuncInfo info = funcsInfoMap.get(id);
 					if (info == null) {
-						errors.add(new Error("º¯Êı " + id + " Î´¶¨Òå"));
+						errors.add(new Error("å‡½æ•° " + id + " æœªå®šä¹‰"));
 						return ;
 					} else {
 						root.setAttribute("type", funcsInfoMap.get(id).returnType);
@@ -289,18 +289,18 @@ public class Analyser {
 						typeList.add(type);
 						setParamType(typeList, parameters.getSon(1));
 						if (arglist.size() != typeList.size()) {
-							errors.add(new Error("º¯Êı " + id + " ²ÎÊı¸öÊı²»Æ¥Åä"));
+							errors.add(new Error("å‡½æ•° " + id + " å‚æ•°ä¸ªæ•°ä¸åŒ¹é…"));
 						} else {
 							for (int i = 0; i < arglist.size(); i++) {
 								Set<String> types = typeMap.get(info.getVarInfo(arglist.get(i)).type);
 								if (!types.contains(typeList.get(i))) {
-									errors.add(new Error("º¯Êı " + id + " ²ÎÊıÀàĞÍ²»Æ¥Åä"));
+									errors.add(new Error("å‡½æ•° " + id + " å‚æ•°ç±»å‹ä¸åŒ¹é…"));
 								}
 							}
 						}
 					} else {
 						if (arglist.size() > 0)
-							errors.add(new Error("º¯Êı " + id + " ²ÎÊı¸öÊı²»Æ¥Åä"));
+							errors.add(new Error("å‡½æ•° " + id + " å‚æ•°ä¸ªæ•°ä¸åŒ¹é…"));
 					}
 				}
 			} else if (node.getName().equals("INTEGER")) {
@@ -322,7 +322,7 @@ public class Analyser {
 
 				if (op1.equals("++") || op1.equals("--")) {
 					if (!item.getAttribute("type").equals("int") && !item.getAttribute("type").equals("char")) {
-						errors.add(new Error(item.getAttribute("type") + " ²»ÄÜ½øĞĞ×ÔÔö»ò×Ô¼õÔËËã"));
+						errors.add(new Error(item.getAttribute("type") + " ä¸èƒ½è¿›è¡Œè‡ªå¢æˆ–è‡ªå‡è¿ç®—"));
 					}
 				}
 				root.setAttribute("type", item.getAttribute("type"));
@@ -376,18 +376,18 @@ public class Analyser {
 			Node son = ret.getSon(0);
 			if (son.getName().equals("EMPTY")) {
 				if (!type.equals("void"))
-					errors.add(new Error("º¯Êı " + name + " ·µ»ØÀàĞÍ²»Æ¥Åä"));
+					errors.add(new Error("å‡½æ•° " + name + " è¿”å›ç±»å‹ä¸åŒ¹é…"));
 			} else {
 				String t = son.getAttribute("type");
 				Set<String> s = typeMap.get(type);
 				if ((s == null) || (s != null && !s.contains(t))) {
-					errors.add(new Error("º¯Êı " + name + " ·µ»ØÀàĞÍ²»Æ¥Åä"));
+					errors.add(new Error("å‡½æ•° " + name + " è¿”å›ç±»å‹ä¸åŒ¹é…"));
 				}
 			}
 		}
 
 		if (set.size() == 0 && !type.equals("void")) {
-			errors.add(new Error("º¯Êı " + name + " ·µ»ØÀàĞÍ²»Æ¥Åä"));
+			errors.add(new Error("å‡½æ•° " + name + " è¿”å›ç±»å‹ä¸åŒ¹é…"));
 		}
 	}
 

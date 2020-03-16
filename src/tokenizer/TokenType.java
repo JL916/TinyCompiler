@@ -1,6 +1,6 @@
 package tokenizer;
 
-// ÀàĞÍ
+// ç±»å‹
 public enum TokenType {
 	
 	END,
@@ -15,15 +15,15 @@ public enum TokenType {
 	
 	public String print() {
 		switch(this) {
-		case END : return "ÖÕÖ¹·û";
-		case KEYWORD : return "¹Ø¼ü×Ö";
-		case TYPE : return "ÀàĞÍÃû";
-		case SYMBOL : return "·ûºÅ";
-		case INTEGER : return "ÕûÊı";
-		case FLOAT : return "¸¡µãÊı";
-		case CHAR : return "×Ö·û";
-		case STRING : return "×Ö·û´®";
-		case IDENTIFIER : return "±êÊ¶·û";
+		case END : return "ç»ˆæ­¢ç¬¦";
+		case KEYWORD : return "å…³é”®å­—";
+		case TYPE : return "ç±»å‹å";
+		case SYMBOL : return "ç¬¦å·";
+		case INTEGER : return "æ•´æ•°";
+		case FLOAT : return "æµ®ç‚¹æ•°";
+		case CHAR : return "å­—ç¬¦";
+		case STRING : return "å­—ç¬¦ä¸²";
+		case IDENTIFIER : return "æ ‡è¯†ç¬¦";
 		default : return "";
 		}
 	}

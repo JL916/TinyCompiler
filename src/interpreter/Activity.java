@@ -1,12 +1,12 @@
 package interpreter;
 
-// »î¶¯¼ÇÂ¼
+// æ´»åŠ¨è®°å½•
 public class Activity {
 
-	String func;	// º¯ÊıÃû
-	int start;		// ±äÁ¿Õ»ÖĞµÄ±äÁ¿ÆğÊ¼Î»ÖÃ
-	int now;		// µ±Ç°Ö´ĞĞËÄÔªÊ½µÄÏÂ±ê
-	boolean flag;	// ÅĞ¶Ï×Ó³ÌĞòÊÇ·ñÖ´ĞĞ
+	String func;	// å‡½æ•°å
+	int start;		// å˜é‡æ ˆä¸­çš„å˜é‡èµ·å§‹ä½ç½®
+	int now;		// å½“å‰æ‰§è¡Œå››å…ƒå¼çš„ä¸‹æ ‡
+	boolean flag;	// åˆ¤æ–­å­ç¨‹åºæ˜¯å¦æ‰§è¡Œ
 	
 	public Activity(String func, int start, int now) {
 		this.func = func;

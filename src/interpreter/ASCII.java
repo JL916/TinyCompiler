@@ -3,7 +3,7 @@ package interpreter;
 import java.util.HashMap;
 import java.util.Map;
 
-// º¬ÓĞ×ªÒå×Ö·ûµÄ ASCII Âë±í
+// å«æœ‰è½¬ä¹‰å­—ç¬¦çš„ ASCII ç è¡¨
 public class ASCII {
 
 	static Map<String, Integer> map;

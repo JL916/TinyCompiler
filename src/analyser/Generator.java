@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-// ËÄÔªÊ½Éú³É µİ¹é´¦Àí·ÇÖÕ¼«·û
+// å››å…ƒå¼ç”Ÿæˆ é€’å½’å¤„ç†éç»ˆæç¬¦
 public class Generator {
 	
 	private List<FourItem> fourItemList;
