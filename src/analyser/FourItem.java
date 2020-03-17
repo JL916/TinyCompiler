@@ -1,13 +1,13 @@
 package analyser;
 
-// ËÄÔªÊ½
+// 四元式
 public class FourItem {
-	
+
 	public String op;
 	public String arg1;
 	public String arg2;
 	public String result;
-	
+
 	public FourItem(String op, String arg1, String arg2, String result) {
 		super();
 		this.op = op;

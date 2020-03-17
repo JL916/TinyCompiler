@@ -15,7 +15,7 @@ import error.Error;
 public class Analyser {
 
 	private Map<String, FuncInfo> funcsInfoMap; // 函数信息表
-	private Map<String, Set<String>> typeMap; 	// 类型转换表
+	private Map<String, Set<String>> typeMap; // 类型转换表
 	private List<Error> errors;
 	private Node root;
 
@@ -37,19 +37,21 @@ public class Analyser {
 		// 语义分析
 		this.root = root;
 		funcsInfoMap = new HashMap<>();
-		
+
+		// 内置print函数
 		FuncInfo printInfo = new FuncInfo("void");
 		printInfo.vars.add("arg");
 		printInfo.args.put("arg", new VarInfo("string"));
 		printInfo.arglist.add("arg");
 		funcsInfoMap.put("print", printInfo);
-		
+
+		// 内置scan函数
 		FuncInfo scanInfo = new FuncInfo("void");
 		scanInfo.vars.add("arg");
 		scanInfo.args.put("arg", new VarInfo("float"));
 		scanInfo.arglist.add("arg");
 		funcsInfoMap.put("scan", scanInfo);
-		
+
 		errors = new ArrayList<>();
 		setFuncsInfoMap(root); // 设置函数信息
 		checkType(); // 检查类型
@@ -71,7 +73,7 @@ public class Analyser {
 		Node arglist = func.getSon(3);
 		Node definelist = func.getSon(6);
 		FuncInfo info = new FuncInfo(type);
-		
+
 		if (funcsInfoMap.containsKey(id)) {
 			errors.add(new Error("函数 " + id + " 重复定义"));
 		} else {
@@ -274,11 +276,11 @@ public class Analyser {
 					FuncInfo info = funcsInfoMap.get(id);
 					if (info == null) {
 						errors.add(new Error("函数 " + id + " 未定义"));
-						return ;
+						return;
 					} else {
 						root.setAttribute("type", funcsInfoMap.get(id).returnType);
 					}
-					
+
 					Node parameters = root.getSon(1).getSon(1);
 					List<String> typeList = new ArrayList<>();
 					List<String> arglist = info.arglist;
@@ -332,7 +334,7 @@ public class Analyser {
 
 	private void setParamType(List<String> typeList, Node param) {
 		if (param.getSons().size() == 1)
-			return ;
+			return;
 		Node expression = param.getSon(1);
 		setType(expression);
 		String type = expression.getAttribute("type");

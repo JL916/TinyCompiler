@@ -6,12 +6,12 @@ import java.util.Set;
 
 // 产生式类
 public class Producer {
-	
-	// S -> func funcs
-	private String left;		// S
+
+	// 例：S -> func funcs
+	private String left; // S
 	private List<String> right; // func funcs
 	private Set<String> select; // 产生式的 select 集
-	
+
 	public Producer(String left, List<String> right) {
 		super();
 		this.left = left;

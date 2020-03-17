@@ -2,6 +2,8 @@ package complier;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -64,6 +66,16 @@ public class Compiler extends JFrame implements ActionListener {
 	private Interpreter interpreter;
 
 	public Compiler() {
+		Font f = null;
+		try {
+			f = Font.createFont(Font.TRUETYPE_FONT, new File("resources/NotoSansMonoCJKsc-Regular.otf"));
+		} catch (FontFormatException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		f = f.deriveFont(Font.PLAIN, 16);
+
 		openMenu = new JMenuItem("打开");
 		saveMenu = new JMenuItem("保存");
 		tokenizerMenu = new JMenuItem("词法分析");
@@ -77,6 +89,12 @@ public class Compiler extends JFrame implements ActionListener {
 		tokenTable = new JTable(tokenTableModel);
 		codeArea = new JTextArea();
 		resultArea = new JTextArea();
+
+		textArea.setFont(f);
+		tokenTable.setFont(f);
+		tokenTable.setRowHeight(25);
+		codeArea.setFont(f);
+		resultArea.setFont(f);
 
 		tokenizer = new Tokenizer();
 		parser = new Parser(new File("grammar.txt"));
@@ -114,9 +132,9 @@ public class Compiler extends JFrame implements ActionListener {
 		JPanel resultPanel = new JPanel();
 
 		textPanel.setLocation(50, 30);
-		textPanel.setSize(330, 480);
-		tokensPanel.setLocation(400, 30);
-		tokensPanel.setSize(330, 480);
+		textPanel.setSize(360, 480);
+		tokensPanel.setLocation(430, 30);
+		tokensPanel.setSize(300, 480);
 		codePanel.setLocation(750, 30);
 		codePanel.setSize(330, 650);
 		resultPanel.setLocation(50, 530);
@@ -154,7 +172,7 @@ public class Compiler extends JFrame implements ActionListener {
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		Dimension screen = toolkit.getScreenSize();
 		this.setTitle("Tiny Compiler");
-		this.setSize(1150, 800);
+		this.setSize(1130, 800);
 		this.setLocation(screen.width / 2 - this.getWidth() / 2, screen.height / 2 - this.getHeight() / 2);
 		this.setResizable(false);
 		this.setLayout(null);
@@ -228,6 +246,7 @@ public class Compiler extends JFrame implements ActionListener {
 				}
 			}
 		} else if (e.getSource() == runMenu) {
+			// 解释运行
 			if (generator.getFourItemList() == null) {
 				resultArea.append("未进行语义分析\n");
 				return;
@@ -246,6 +265,7 @@ public class Compiler extends JFrame implements ActionListener {
 				}
 			}.start();
 		} else if (e.getSource() == compileAndRunMenu) {
+			// 编译并运行
 			tokenTableModel.setRowCount(0);
 			codeArea.setText("");
 			resultArea.setText("");

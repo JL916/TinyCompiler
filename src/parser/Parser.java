@@ -12,7 +12,7 @@ import tokenizer.Token;
 import tokenizer.TokenType;
 import tokenizer.Tokenizer;
 
-// ll(1) 语法分析 生成语法树
+// LL(1) 语法分析 生成语法树
 public class Parser {
 
 	private Map<String, Set<Producer>> producerMap;
@@ -23,7 +23,7 @@ public class Parser {
 	private int index;
 	private List<Producer> producers;
 	private List<Error> errors;
-	
+
 	private Node root;
 	private Node curNode;
 
@@ -44,7 +44,7 @@ public class Parser {
 		root = new Node("S", null);
 		curNode = root;
 		errors = new ArrayList<>();
-		
+
 		parse("S");
 	}
 
@@ -70,7 +70,7 @@ public class Parser {
 		}
 
 		producers.add(producer);
-		
+
 		List<String> right = producer.getRight();
 		for (int i = 0; i < right.size(); i++) {
 			Token t = tokens.get(index);
@@ -80,10 +80,10 @@ public class Parser {
 				s = type.toString();
 
 			String cur = right.get(i);
-			
+
 			Node son = new Node(cur, curNode);
 			curNode.setSon(son);
-			
+
 			if (terminals.contains(cur)) {
 				// 终极符判断是否相等
 				if (cur.equals("EMPTY")) {
@@ -104,7 +104,8 @@ public class Parser {
 					index++;
 					continue;
 				} else {
-					errors.add(new Error("line " + tokenizer.getLineNumber(index) + " : " + t.getValue() + " 应改为 " + cur));
+					errors.add(
+							new Error("line " + tokenizer.getLineNumber(index) + " : " + t.getValue() + " 应改为 " + cur));
 					return false;
 				}
 			} else if (nonterminals.contains(cur)) {

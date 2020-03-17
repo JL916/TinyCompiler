@@ -6,17 +6,17 @@ import java.util.Map;
 
 // 四元式生成 递归处理非终极符
 public class Generator {
-	
+
 	private List<FourItem> fourItemList;
 	private Map<String, FuncInfo> funcsInfoMap;
 	private FuncInfo funcInfo;
-	
-	public void generate (Map<String, FuncInfo> funcsInfoMap, Node root) {
+
+	public void generate(Map<String, FuncInfo> funcsInfoMap, Node root) {
 		this.funcsInfoMap = funcsInfoMap;
 		fourItemList = new ArrayList<>();
 		handleS(root);
 	}
-	
+
 	private void handleS(Node s) {
 		handleFunc(s.getSon(0));
 		handleFuncs(s.getSon(1));
@@ -32,7 +32,7 @@ public class Generator {
 
 	private void handleDefinelist(Node definelist) {
 		if (definelist.getSons().size() == 1)
-			return ;
+			return;
 		handleDefinestatement(definelist.getSon(0));
 		handleDefinelist(definelist.getSon(1));
 	}
@@ -44,26 +44,26 @@ public class Generator {
 			handleExpression(expression);
 			String val = expression.getAttribute("val");
 			FourItem fourItem = new FourItem("=", val, "", definestatement.getSon(1).getAttribute("val"));
-			
+
 			if (expression.getAttribute("flag").equals("true")) {
 				fourItem.arg1 = fourItemList.get(Integer.parseInt(val) - 1).result;
 			}
 			fourItemList.add(fourItem);
 		}
-		
+
 		handleOther(definestatement.getSon(3));
 	}
-	
+
 	private void handleOther(Node other) {
 		if (other.getSons().size() == 1)
-			return ;
+			return;
 		Node init = other.getSon(2);
 		if (init.getSons().size() > 1) {
 			Node expression = init.getSon(1);
 			handleExpression(expression);
 			String val = expression.getAttribute("val");
 			FourItem fourItem = new FourItem("=", val, "", other.getSon(1).getAttribute("val"));
-			
+
 			if (expression.getAttribute("flag").equals("true")) {
 				fourItem.arg1 = fourItemList.get(Integer.parseInt(val) - 1).result;
 			}
@@ -136,7 +136,7 @@ public class Generator {
 			String type = expression.getAttribute("type");
 			funcInfo.vars.add(id);
 			funcInfo.tmps.put(id, new VarInfo(type));
-			
+
 			if (op2.equals("=")) {
 				funcInfo.vars.remove(id);
 				funcInfo.tmps.remove(id);
@@ -190,18 +190,18 @@ public class Generator {
 					fourItem.arg2 = list.toString();
 				}
 				fourItem.result = "$" + (fourItemList.size() + 1);
-				
+
 				String type = item.getAttribute("type");
 				funcInfo.vars.add(fourItem.result);
 				funcInfo.tmps.put(fourItem.result, new VarInfo(type));
-				
+
 				fourItemList.add(fourItem);
 				item.setAttribute("val", fourItemList.size() + "");
 				item.setAttribute("flag", "true");
 			}
 		} else if (node.getName().equals("INTEGER")) {
 			item.setAttribute("val", node.getAttribute("val"));
-		} else if (node.getName().equals("FLOAT")) { 
+		} else if (node.getName().equals("FLOAT")) {
 			item.setAttribute("val", node.getAttribute("val"));
 		} else if (node.getName().equals("'")) {
 			item.setAttribute("val", "'" + item.getSon(1).getAttribute("val") + "'");
@@ -224,7 +224,7 @@ public class Generator {
 			String type = item.getAttribute("type");
 			funcInfo.vars.add(id);
 			funcInfo.tmps.put(id, new VarInfo(type));
-			
+
 			if (op1.equals("++") || op1.equals("--")) {
 				funcInfo.vars.remove(id);
 				funcInfo.tmps.remove(id);
@@ -235,7 +235,7 @@ public class Generator {
 				fourItem.arg2 = fourItem.arg1;
 				fourItem.arg1 = "0";
 			}
-			
+
 			fourItemList.add(fourItem);
 			item.setAttribute("val", fourItemList.size() + "");
 			item.setAttribute("flag", "true");
@@ -254,10 +254,10 @@ public class Generator {
 			expr.setAttribute("flag", expression.getAttribute("flag"));
 		}
 	}
-	
+
 	private void handleParam(List<String> list, Node param) {
 		if (param.getSons().size() == 1)
-			return ;
+			return;
 		Node expression = param.getSon(1);
 		handleExpression(expression);
 		String val = expression.getAttribute("val");
@@ -300,7 +300,7 @@ public class Generator {
 			return;
 		}
 	}
-	
+
 	private void handleWhilestatement(Node whilestatement) {
 		Node expression = whilestatement.getSon(2);
 		Node statements = whilestatement.getSon(5);
@@ -315,21 +315,21 @@ public class Generator {
 		fourItemList.add(jzItem);
 
 		handleStatements(statements);
-		
+
 		jzItem.result = (fourItemList.size() + 2) + "";
 
 		FourItem jItem = new FourItem("j", "", "", label + "");
 		fourItemList.add(jItem);
 	}
-	
+
 	private void handleForstatement(Node forstatement) {
 		Node expression1 = forstatement.getSon(2);
 		Node expression2 = forstatement.getSon(4);
 		Node expression3 = forstatement.getSon(6);
 		Node statements = forstatement.getSon(9);
-		
+
 		handleExpression(expression1);
-		
+
 		int label = fourItemList.size() + 1;
 		handleExpression(expression2);
 		String val = expression2.getAttribute("val");
@@ -338,23 +338,23 @@ public class Generator {
 			jzItem.arg1 = fourItemList.get(Integer.parseInt(val) - 1).result;
 		}
 		fourItemList.add(jzItem);
-		
+
 		handleStatements(statements);
 		handleExpression(expression3);
-		
+
 		jzItem.result = (fourItemList.size() + 2) + "";
 
 		FourItem jItem = new FourItem("j", "", "", label + "");
 		fourItemList.add(jItem);
 	}
-	
+
 	private void handleDowhilestatement(Node dowhilestatement) {
 		Node statements = dowhilestatement.getSon(2);
 		Node expression = dowhilestatement.getSon(6);
-		
+
 		int label = fourItemList.size() + 1;
 		handleStatements(statements);
-		
+
 		handleExpression(expression);
 		String val = expression.getAttribute("val");
 		FourItem jnzItem = new FourItem("jnz", val, "", label + "");
@@ -363,7 +363,7 @@ public class Generator {
 		}
 		fourItemList.add(jnzItem);
 	}
-	
+
 	private void handleReturnstatement(Node returnstatement) {
 		Node node = returnstatement.getSon(1).getSon(0);
 		String name = node.getName();
