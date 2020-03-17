@@ -1,6 +1,6 @@
-### 类c语言编译器
+## 类c语言编译器
 
-#### 特点
+### 特点
 
 - LL(1) 自顶向下预测分析法
 - 支持函数调用
@@ -12,7 +12,7 @@
 - 不支持全局变量
 - ...
 
-#### 目录结构
+### 目录结构
 
 src 源码  
     |- analyser 语义分析与中间代码生成  
@@ -25,3 +25,6 @@ src 源码
 grammar.txt 文法规则文件 需要与程序放在同一路径下
 
 test/test?.c 测试用例
+
+### 效果示意
+![](https://github.com/JL916/TinyCompiler/blob/master/resources/test.png)
